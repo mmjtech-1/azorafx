@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #080b11;
+  --bg-secondary: #0e1117;
+  --bg-tertiary: #141820;
+  --bg-hover: #1a1f2b;
+  --bg-glass: rgba(255, 255, 255, 0.03);
+
+  --accent: #00d68f;
+  --accent-dim: #00a36c;
+  --accent-glow: rgba(0, 214, 143, 0.15);
+  --accent-subtle: rgba(0, 214, 143, 0.08);
+
+  --profit: #00d68f;
+  --loss: #ff4757;
+  --warning: #ffa502;
+  --info: #3d8ef8;
+  --neutral: #6b7280;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #4b5563;
+
+  --border: rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(0, 214, 143, 0.3);
+  --border-strong: rgba(255, 255, 255, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--bg-primary);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(0, 214, 143, 0.08), transparent 32rem),
+    var(--bg-primary);
+  color: var(--text-primary);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+::selection {
+  background: var(--accent-subtle);
+  color: var(--text-primary);
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes gridShift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 64px 64px;
+  }
+}
+
+.landing-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  animation: gridShift 18s linear infinite;
+}
+
+@media (max-width: 767px) {
+  table,
+  .mobile-scroll {
+    min-width: 720px;
+  }
+}
