@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   description: "Choose Free or Pro pricing for Azora FX, with PayPal, Binance Pay, and Pakistani payment methods.",
 };
 
-const free = ["20 trades/month", "3 AI reviews/month", "High-impact calendar only", "One challenge tracker", "Core dashboard"];
-const pro = ["Unlimited trades", "Unlimited AI reviews", "All calendar impacts", "Multiple challenges", "Advanced analytics", "Signals and psychology insights"];
+const free = ["Trade Journal (20/month)", "3 AI Reviews", "High-impact Calendar only", "Basic Analytics (7 days)", "2 Signal pairs", "1 Challenge"];
+const pro = ["Unlimited Trade Journal", "Unlimited AI Reviews", "Unlimited Calendar", "Unlimited Analytics", "Unlimited Signal pairs", "Unlimited Challenges"];
 
 function PlanCard({ pro: isPro }: { pro?: boolean }) {
   const features = isPro ? pro : free;

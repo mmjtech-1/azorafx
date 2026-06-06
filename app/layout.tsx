@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://fx.azoraglobal.com"),
   title: {
-    default: "Azora FX — Professional Trading Journal & Analytics",
+    default: "Azora FX - Professional Trading Journal & Analytics",
     template: "%s | Azora FX",
   },
   description:
     "Track trades, analyze performance, get AI-powered trade reviews, and monitor prop firm challenges. The most advanced trading platform for forex and crypto traders.",
   openGraph: {
-    title: "Azora FX — Professional Trading Journal & Analytics",
+    title: "Azora FX - Professional Trading Journal & Analytics",
     description:
       "Track trades, analyze performance, get AI-powered trade reviews, and monitor prop firm challenges.",
     url: "https://fx.azoraglobal.com",
@@ -21,9 +22,17 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Azora FX — Professional Trading Journal & Analytics",
+    title: "Azora FX - Professional Trading Journal & Analytics",
     description: "Professional trading journal, analytics, AI reviews, and prop firm tracking.",
     images: ["/og-image.png"],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.svg",
   },
 };
 
@@ -35,7 +44,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body>
+        {/* Google Analytics tag placeholder: add the GA script/component here when the measurement ID is ready. */}
         {children}
+        <WhatsAppButton />
         <Toaster
           theme="dark"
           richColors

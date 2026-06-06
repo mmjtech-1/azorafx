@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BarChart3, Bot, Brain, Check, ClipboardList, LineChart, ShieldCheck, Star, Target, Trophy } from "lucide-react";
+import { LandingStats } from "@/components/landing/LandingStats";
 
 const features = [
   { icon: ClipboardList, title: "Trade Journal", description: "Log every trade with emotion tracking and screenshots" },
@@ -10,8 +11,8 @@ const features = [
   { icon: Trophy, title: "Challenge Tracker", description: "Never break a prop firm rule again" },
 ];
 
-const free = ["20 trades/month", "3 AI reviews/month", "High-impact calendar", "One challenge tracker"];
-const pro = ["Unlimited trades", "Unlimited AI reviews", "All analytics", "All payment methods", "Signals and psychology", "Unlimited challenges"];
+const free = ["Trade Journal (20/month)", "3 AI Reviews", "High-impact Calendar only", "Basic Analytics (7 days)", "2 Signal pairs", "1 Challenge"];
+const pro = ["Unlimited Trade Journal", "Unlimited AI Reviews", "Unlimited Calendar", "Unlimited Analytics", "Unlimited Signal pairs", "Unlimited Challenges"];
 
 function PricingCard({ name, price, items, pro: isPro }: { name: string; price: string; items: string[]; pro?: boolean }) {
   return (
@@ -54,6 +55,8 @@ function DashboardMockup() {
 }
 
 export default function LandingPage() {
+  const year = new Date().getFullYear();
+
   return (
     <main className="bg-[#080B11] text-white">
       <section className="relative min-h-screen overflow-hidden px-4 py-20">
@@ -96,9 +99,9 @@ export default function LandingPage() {
           <p className="text-center text-sm font-semibold uppercase tracking-[0.18em] text-[#00D68F]">Trusted by traders in 20+ countries</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {[
-              ["Adeel Khan", "Azora FX made my FTMO rules impossible to ignore. That alone saved my challenge."],
-              ["Sofia Martins", "The AI review is direct, practical, and much better than journaling into a blank page."],
-              ["Daniel Reed", "I finally know which sessions and emotions actually make me profitable."],
+              ["Hamza Tariq", "I trade London session on gold, and the journal finally showed me how badly FOMO entries were affecting my results."],
+              ["Omar Al-Farsi", "The prop firm tracker is simple but serious. I can see daily loss and max drawdown before I place another position."],
+              ["Zainab Qureshi", "AI reviews helped me separate a valid forex setup from a trade I only took because price was moving fast."],
             ].map(([name, quote]) => (
               <div key={name} className="rounded-[16px] border border-white/[0.06] bg-[#0E1117] p-5">
                 <Star className="h-5 w-5 fill-[#00D68F] text-[#00D68F]" />
@@ -108,10 +111,11 @@ export default function LandingPage() {
             ))}
           </div>
           <div className="mt-8 grid gap-3 rounded-[16px] border border-white/[0.06] bg-[#0E1117] p-5 text-center md:grid-cols-3">
-            <p><span className="font-semibold text-white">10,000+</span> Trades Logged</p>
-            <p><span className="font-semibold text-white">500+</span> Active Traders</p>
-            <p><span className="font-semibold text-white">95%</span> Rule Compliance Rate</p>
+            <p className="font-semibold text-white">Built for serious traders</p>
+            <p className="font-semibold text-white">Prop firm ready</p>
+            <p className="font-semibold text-white">AI-powered insights</p>
           </div>
+          <LandingStats />
         </div>
       </section>
 
@@ -131,7 +135,7 @@ export default function LandingPage() {
           <div>
             <p className="text-lg font-semibold text-[#00D68F]">Azora FX</p>
             <p className="text-sm text-slate-400">Professional trading performance platform.</p>
-            <p className="mt-2 text-xs text-slate-500">Copyright MMJ Technologies SMC Pvt Ltd</p>
+            <p className="mt-2 text-xs text-slate-500">© {year} MMJ Technologies SMC Pvt Ltd</p>
           </div>
           <div className="flex flex-wrap gap-4 text-sm text-slate-400">
             <Link href="#features">Features</Link>
