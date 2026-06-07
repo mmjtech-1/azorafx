@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { BarChart3, Bot, Brain, Check, ClipboardList, LineChart, ShieldCheck, Star, Target, Trophy } from "lucide-react";
-import { LandingStats } from "@/components/landing/LandingStats";
 
 const features = [
   { icon: ClipboardList, title: "Trade Journal", description: "Log every trade with emotion tracking and screenshots" },
@@ -99,9 +98,9 @@ export default function LandingPage() {
           <p className="text-center text-sm font-semibold uppercase tracking-[0.18em] text-[#00D68F]">Trusted by traders in 20+ countries</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {[
-              ["Hamza Tariq", "I trade London session on gold, and the journal finally showed me how badly FOMO entries were affecting my results."],
-              ["Omar Al-Farsi", "The prop firm tracker is simple but serious. I can see daily loss and max drawdown before I place another position."],
-              ["Zainab Qureshi", "AI reviews helped me separate a valid forex setup from a trade I only took because price was moving fast."],
+              ["Hassan Al-Rashidi — Dubai", "I trade London session on gold, and the journal finally showed me how badly FOMO entries were affecting my results."],
+              ["Usman Tariq — Lahore", "The prop firm tracker is simple but serious. I can see daily loss and max drawdown before I place another position."],
+              ["Bilal Chaudhry — Karachi", "AI reviews helped me separate a valid forex setup from a trade I only took because price was moving fast."],
             ].map(([name, quote]) => (
               <div key={name} className="rounded-[16px] border border-white/[0.06] bg-[#0E1117] p-5">
                 <Star className="h-5 w-5 fill-[#00D68F] text-[#00D68F]" />
@@ -115,7 +114,6 @@ export default function LandingPage() {
             <p className="font-semibold text-white">Prop firm ready</p>
             <p className="font-semibold text-white">AI-powered insights</p>
           </div>
-          <LandingStats />
         </div>
       </section>
 
