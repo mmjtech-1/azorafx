@@ -1,0 +1,7 @@
+.next
+.vercel/output
+node_modules
+work
+outputs
+*.zip
+tsconfig.tsbuildinfo
