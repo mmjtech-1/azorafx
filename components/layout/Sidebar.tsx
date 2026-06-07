@@ -14,6 +14,7 @@ import {
   ClipboardList,
   LayoutDashboard,
   LineChart,
+  Plug,
   Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -33,6 +34,7 @@ const navSections = [
       { label: "Signals", href: "/dashboard/signals", icon: LineChart },
       { label: "Psychology", href: "/dashboard/psychology", icon: Brain },
       { label: "AI Review", href: "/dashboard/ai-review", icon: Bot },
+      { label: "Connect Account", href: "/dashboard/connect", icon: Plug },
     ],
   },
   {
@@ -46,7 +48,7 @@ const navSections = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { user, subscription } = useDashboard();
+  const { user, subscription, connectedAccounts } = useDashboard();
   const { isCollapsed, toggle } = useSidebarStore();
   const isPro = subscription.plan === "pro";
 
@@ -131,6 +133,18 @@ export function Sidebar() {
       </nav>
 
       <div className="space-y-3 border-t border-border p-3">
+        {!isCollapsed ? (
+          connectedAccounts[0] ? (
+            <div className="rounded-[10px] border border-border bg-background-tertiary p-3 text-xs text-foreground-secondary">
+              <p className="font-semibold text-foreground-primary">{connectedAccounts[0].broker.toUpperCase()}</p>
+              <p className="mt-1 truncate">{connectedAccounts[0].nickname ?? "Connected account"}</p>
+            </div>
+          ) : (
+            <Link className="flex h-10 items-center justify-center gap-2 rounded-[10px] border border-border-accent bg-accent-subtle px-3 text-sm font-semibold text-accent" href="/dashboard/connect">
+              <Plug className="h-4 w-4" /> Connect Account
+            </Link>
+          )
+        ) : null}
         {!isPro && !isCollapsed ? (
           <Link
             className="flex h-10 items-center justify-center rounded-[10px] bg-gradient-to-r from-accent to-[#00F0A0] px-3 text-sm font-semibold text-black shadow-accent transition hover:brightness-110"

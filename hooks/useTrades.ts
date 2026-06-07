@@ -14,6 +14,7 @@ export type TradeFilters = {
   outcome?: string;
   session?: string;
   setup?: string;
+  source?: string;
   dateFrom?: string;
   dateTo?: string;
   page?: number;
@@ -27,6 +28,7 @@ function buildSearch(filters: TradeFilters = {}) {
   if (filters.outcome) params.set("outcome", filters.outcome);
   if (filters.session) params.set("session", filters.session);
   if (filters.setup) params.set("setup", filters.setup);
+  if (filters.source) params.set("source", filters.source);
   if (filters.dateFrom) params.set("dateFrom", filters.dateFrom);
   if (filters.dateTo) params.set("dateTo", filters.dateTo);
   if (filters.page) params.set("page", String(filters.page));

@@ -37,6 +37,10 @@ const pageCopy: Record<string, { title: string; subtitle: string }> = {
     title: "Challenge Tracker",
     subtitle: "Prop firm rules, targets, and risk limits.",
   },
+  "/dashboard/connect": {
+    title: "Connect Account",
+    subtitle: "Auto-import trades from brokers and exchanges.",
+  },
   "/dashboard/billing": {
     title: "Billing",
     subtitle: "Subscription, usage, and payment history.",
@@ -49,8 +53,13 @@ const pageCopy: Record<string, { title: string; subtitle: string }> = {
 
 export function Topbar() {
   const pathname = usePathname();
-  const { user } = useDashboard();
+  const { user, connectedAccounts } = useDashboard();
   const copy = pageCopy[pathname] ?? pageCopy["/dashboard"];
+  const primaryAccount = connectedAccounts.find((account) => account.is_primary) ?? connectedAccounts[0];
+  const syncing = connectedAccounts.some((account) => account.sync_status === "syncing");
+  const lastSynced = primaryAccount?.last_synced_at
+    ? Math.max(0, Math.round((Date.now() - new Date(primaryAccount.last_synced_at).getTime()) / 60000))
+    : null;
 
   return (
     <header className="sticky top-0 z-20 flex h-[60px] items-center justify-between border-b border-border bg-[#080B11]/80 px-3 backdrop-blur-xl sm:px-4 md:px-6">
@@ -60,10 +69,15 @@ export function Topbar() {
       </div>
 
       <div className="flex items-center gap-3">
+        {primaryAccount ? (
+          <div className="hidden h-9 items-center rounded-full border border-border bg-background-secondary px-3 text-xs font-semibold text-foreground-primary sm:flex">
+            {Number(primaryAccount.account_balance ?? 0).toLocaleString()} {primaryAccount.account_currency ?? "USD"}
+          </div>
+        ) : null}
         <div className="hidden h-9 items-center gap-2 rounded-full border border-border bg-background-secondary px-3 text-xs font-medium text-foreground-secondary sm:flex">
-          <span className="relative flex h-2 w-2" aria-hidden="true">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+          <span className="relative flex h-2 w-2" aria-hidden="true" title={lastSynced === null ? "Last synced: never" : `Last synced: ${lastSynced} min ago`}>
+            {syncing ? <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" /> : null}
+            <span className={`relative inline-flex h-2 w-2 rounded-full ${syncing ? "bg-accent" : "bg-slate-500"}`} />
           </span>
           Bot Active
         </div>

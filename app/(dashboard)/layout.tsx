@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
-import { DashboardProvider, type DashboardSubscription, type DashboardUser } from "@/components/layout/DashboardProvider";
+import { DashboardProvider, type DashboardConnectedAccount, type DashboardSubscription, type DashboardUser } from "@/components/layout/DashboardProvider";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { QueryProvider } from "@/components/layout/QueryProvider";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
+import { AutoSyncAccounts } from "@/components/layout/AutoSyncAccounts";
 import { createClient } from "@/lib/supabase/server";
 
 function getInitials(nameOrEmail: string) {
@@ -30,7 +31,7 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  const [{ data: profile }, { data: subscription }] = await Promise.all([
+  const [{ data: profile }, { data: subscription }, { data: connectedAccounts }] = await Promise.all([
     supabase
       .from("profiles")
       .select("full_name, display_name, email")
@@ -41,6 +42,12 @@ export default async function DashboardLayout({
       .select("plan, status")
       .eq("user_id", user.id)
       .maybeSingle(),
+    supabase
+      .from("connected_accounts")
+      .select("id,broker,nickname,account_balance,account_currency,sync_status,last_synced_at,is_primary")
+      .eq("user_id", user.id)
+      .neq("sync_status", "disconnected")
+      .order("created_at", { ascending: false }),
   ]);
 
   const displayName =
@@ -64,8 +71,9 @@ export default async function DashboardLayout({
   };
 
   return (
-    <DashboardProvider user={dashboardUser} subscription={dashboardSubscription}>
+    <DashboardProvider user={dashboardUser} subscription={dashboardSubscription} connectedAccounts={(connectedAccounts ?? []) as DashboardConnectedAccount[]}>
       <QueryProvider>
+        <AutoSyncAccounts />
         <div className="flex min-h-screen bg-[#080B11] text-foreground-primary">
           <div className="hidden md:block">
             <Sidebar />

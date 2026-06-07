@@ -89,6 +89,18 @@ export function TradeHistoryTable() {
         ),
       },
       {
+        accessorKey: "source",
+        header: "Source",
+        cell: ({ row }) => {
+          const source = row.original.source ?? "manual";
+          return (
+            <span className={cn("rounded-full px-2 py-1 text-xs font-semibold uppercase", source === "manual" ? "bg-background-tertiary text-foreground-secondary" : "bg-accent-subtle text-accent")}>
+              {source === "manual" ? "Manual" : source}
+            </span>
+          );
+        },
+      },
+      {
         accessorKey: "pnl",
         header: "P&L",
         cell: ({ row }) => (
@@ -171,6 +183,7 @@ export function TradeHistoryTable() {
             ["outcome", "Outcome", ["", "open", "win", "loss", "breakeven"]],
             ["session", "Session", ["", "asian", "london", "new_york", "overlap", "pre_market"]],
             ["setup", "Setup", ["", "ema_crossover", "structure_break", "ob_retest", "news_trade", "supply_demand", "fib_retracement", "trendline_break", "other"]],
+            ["source", "Source", ["", "manual", "binance", "bybit"]],
           ].map(([key, label, options]) => (
             <label key={key as string}>
               <span className={labelClass}>{label as string}</span>

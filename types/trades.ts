@@ -43,6 +43,9 @@ export const tradeCreateSchema = z.object({
   tags: textArray,
   opened_at: z.string().datetime(),
   closed_at: z.string().datetime().optional().nullable(),
+  source: z.string().optional().default("manual"),
+  broker_trade_id: z.string().optional().nullable(),
+  connected_account_id: z.string().uuid().optional().nullable(),
 });
 
 export const tradeUpdateSchema = tradeCreateSchema.partial();

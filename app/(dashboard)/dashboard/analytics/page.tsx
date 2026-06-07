@@ -74,9 +74,9 @@ export default function AnalyticsPage() {
         </div>
       ) : data && !hasEnoughTrades ? (
         <div className="rounded-[16px] border border-border bg-background-secondary p-12 text-center">
-          <p className="text-xl font-semibold text-foreground-primary">Log at least 5 trades to see analytics</p>
+          <p className="text-xl font-semibold text-foreground-primary">No trades synced yet — connect your account or log trades manually</p>
           <p className="mt-2 text-sm text-foreground-secondary">
-            Your charts and performance breakdowns will unlock once there is enough journal data.
+            Your charts and performance breakdowns will unlock once there is enough real journal data.
           </p>
         </div>
       ) : data ? (

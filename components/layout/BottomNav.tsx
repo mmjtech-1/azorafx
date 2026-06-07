@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { BarChart3, Bot, Brain, CalendarDays, ClipboardList, CreditCard, LayoutDashboard, LineChart, Menu, Target, X } from "lucide-react";
+import { BarChart3, Bot, Brain, CalendarDays, ClipboardList, CreditCard, LayoutDashboard, LineChart, Menu, Plug, Target, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const primary = [
@@ -18,6 +18,7 @@ const more = [
   { label: "AI Review", href: "/dashboard/ai-review", icon: Bot },
   { label: "Calendar", href: "/dashboard/calendar", icon: CalendarDays },
   { label: "Challenge", href: "/dashboard/challenge", icon: Target },
+  { label: "Connect", href: "/dashboard/connect", icon: Plug },
   { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
 ];
 

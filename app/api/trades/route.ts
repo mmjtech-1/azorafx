@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     .order("opened_at", { ascending: false })
     .range(from, to);
 
-  const filters = ["pair", "outcome", "session", "setup"] as const;
+  const filters = ["pair", "outcome", "session", "setup", "source"] as const;
   for (const filter of filters) {
     const value = params.get(filter);
     if (!value) continue;

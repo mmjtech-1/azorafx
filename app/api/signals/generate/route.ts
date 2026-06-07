@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { decryptSecret } from "@/lib/encryption";
 import { generateSignal } from "@/lib/indicators";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -18,13 +19,13 @@ const symbolMap: Record<string, string> = {
   ETHUSD: "ETHUSDT",
 };
 
-async function fetchKlines(pair: string, timeframe: string): Promise<PriceData | null> {
+async function fetchKlines(pair: string, timeframe: string, apiKey?: string): Promise<PriceData | null> {
   const symbol = symbolMap[pair];
   if (!symbol) return null;
 
   const response = await fetch(
     `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${intervalMap[timeframe] ?? "15m"}&limit=250`,
-    { next: { revalidate: 60 } },
+    { next: { revalidate: 60 }, headers: apiKey ? { "X-MBX-APIKEY": apiKey } : undefined },
   );
   if (!response.ok) return null;
   const rows = (await response.json()) as Array<Array<number | string>>;
@@ -45,12 +46,20 @@ export async function POST() {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { data: configData } = await supabase.from("signal_configs").select("*").eq("user_id", user.id).maybeSingle();
+  const { data: binanceAccount } = await supabase
+    .from("connected_accounts")
+    .select("api_key_encrypted")
+    .eq("user_id", user.id)
+    .eq("broker", "binance")
+    .neq("sync_status", "disconnected")
+    .maybeSingle();
+  const binanceApiKey = binanceAccount?.api_key_encrypted ? decryptSecret(binanceAccount.api_key_encrypted) : undefined;
   const config = (configData ?? defaultSignalConfig) as SignalConfig;
   const generated: Signal[] = [];
 
   for (const pair of config.monitored_pairs) {
     try {
-      const priceData = await fetchKlines(pair, config.signal_timeframe);
+      const priceData = await fetchKlines(pair, config.signal_timeframe, binanceApiKey);
       const signal = priceData ? generateSignal(config, priceData, pair) : null;
       if (signal) generated.push({ ...signal, user_id: user.id });
     } catch {

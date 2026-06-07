@@ -16,6 +16,7 @@ export default function DashboardPreviewPage() {
         plan: "free",
         status: "active",
       }}
+      connectedAccounts={[]}
     >
       <div className="flex min-h-screen bg-[#080B11] text-foreground-primary">
         <Sidebar />

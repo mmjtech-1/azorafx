@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { PlugZap } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useDashboard } from "@/components/layout/DashboardProvider";
 import { MetricCard } from "@/components/dashboard/MetricCard";
@@ -53,7 +55,7 @@ function getGreeting() {
 }
 
 export default function DashboardPage() {
-  const { user } = useDashboard();
+  const { user, connectedAccounts } = useDashboard();
   const [trades, setTrades] = useState<DashboardTrade[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -114,11 +116,13 @@ export default function DashboardPage() {
     };
   }, []);
 
+  const hasConnectedAccount = connectedAccounts.length > 0;
   const hasRealTrades = trades.length > 0;
-  const displayTrades = hasRealTrades ? trades : demoTrades;
+  const displayTrades = useMemo(() => (hasRealTrades ? trades : hasConnectedAccount ? [] : demoTrades), [hasConnectedAccount, hasRealTrades, trades]);
 
   const dashboardData = useMemo(() => {
-    const balance = calculateBalance(displayTrades);
+    const connectedBalance = connectedAccounts.find((account) => account.is_primary)?.account_balance ?? connectedAccounts[0]?.account_balance;
+    const balance = hasConnectedAccount ? Number(connectedBalance ?? calculateBalance(displayTrades)) : calculateBalance(displayTrades);
     const winRate = calculateWinRate(displayTrades);
     const avgRiskReward = calculateAverageRiskReward(displayTrades);
     const openDrawdown = displayTrades
@@ -139,7 +143,7 @@ export default function DashboardPage() {
       tradesThisMonth: calculateTradesThisMonth(displayTrades),
       avgHoldTime: calculateAverageHoldTime(displayTrades),
     };
-  }, [displayTrades]);
+  }, [connectedAccounts, displayTrades, hasConnectedAccount]);
 
   return (
     <motion.div className="space-y-6" initial="hidden" animate="visible" variants={container}>
@@ -148,9 +152,20 @@ export default function DashboardPage() {
         <p className="mt-1 text-sm text-foreground-secondary">
           {getGreeting()}, {user.name}. Here&apos;s your current trading pulse.
         </p>
-        {!hasRealTrades && !isLoading ? (
-          <p className="mt-2 text-xs text-foreground-tertiary">
-            Showing realistic sample trading data until your first journal entries are logged.
+        {!hasConnectedAccount && !isLoading ? (
+          <div className="mt-4 flex flex-col gap-3 rounded-[16px] border border-[#00D68F]/20 bg-[#00D68F]/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[#00D68F]">Sample Data</p>
+              <p className="mt-1 text-sm text-foreground-secondary">Connect your trading account to auto-import trades and replace sample analytics with real data.</p>
+            </div>
+            <Link className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#00D68F] px-4 text-sm font-semibold text-black" href="/dashboard/connect">
+              <PlugZap className="h-4 w-4" /> Connect Account
+            </Link>
+          </div>
+        ) : null}
+        {hasConnectedAccount && !hasRealTrades && !isLoading ? (
+          <p className="mt-3 rounded-[10px] border border-border bg-background-secondary px-3 py-2 text-sm text-foreground-secondary">
+            No trades synced yet — click Sync Now from Connected Accounts or wait for the automatic background sync.
           </p>
         ) : null}
         {error ? (
